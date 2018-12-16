@@ -1,0 +1,118 @@
+{
+   "destination_addresses" : [ "Riverside, CA, USA", "Moreno Valley, CA, USA", "Corona, CA, USA" ],
+   "origin_addresses" : [ "Riverside, CA, USA", "Moreno Valley, CA, USA", "Corona, CA, USA" ],
+   "rows" : [
+      {
+         "elements" : [
+            {
+               "distance" : {
+                  "text" : "1 ft",
+                  "value" : 0
+               },
+               "duration" : {
+                  "text" : "1 min",
+                  "value" : 0
+               },
+               "status" : "OK"
+            },
+            {
+               "distance" : {
+                  "text" : "10.5 mi",
+                  "value" : 16975
+               },
+               "duration" : {
+                  "text" : "16 mins",
+                  "value" : 946
+               },
+               "status" : "OK"
+            },
+            {
+               "distance" : {
+                  "text" : "14.7 mi",
+                  "value" : 23703
+               },
+               "duration" : {
+                  "text" : "19 mins",
+                  "value" : 1114
+               },
+               "status" : "OK"
+            }
+         ]
+      },
+      {
+         "elements" : [
+            {
+               "distance" : {
+                  "text" : "10.9 mi",
+                  "value" : 17575
+               },
+               "duration" : {
+                  "text" : "15 mins",
+                  "value" : 920
+               },
+               "status" : "OK"
+            },
+            {
+               "distance" : {
+                  "text" : "1 ft",
+                  "value" : 0
+               },
+               "duration" : {
+                  "text" : "1 min",
+                  "value" : 0
+               },
+               "status" : "OK"
+            },
+            {
+               "distance" : {
+                  "text" : "25.1 mi",
+                  "value" : 40412
+               },
+               "duration" : {
+                  "text" : "29 mins",
+                  "value" : 1720
+               },
+               "status" : "OK"
+            }
+         ]
+      },
+      {
+         "elements" : [
+            {
+               "distance" : {
+                  "text" : "14.9 mi",
+                  "value" : 24028
+               },
+               "duration" : {
+                  "text" : "19 mins",
+                  "value" : 1128
+               },
+               "status" : "OK"
+            },
+            {
+               "distance" : {
+                  "text" : "24.7 mi",
+                  "value" : 39731
+               },
+               "duration" : {
+                  "text" : "28 mins",
+                  "value" : 1692
+               },
+               "status" : "OK"
+            },
+            {
+               "distance" : {
+                  "text" : "1 ft",
+                  "value" : 0
+               },
+               "duration" : {
+                  "text" : "1 min",
+                  "value" : 0
+               },
+               "status" : "OK"
+            }
+         ]
+      }
+   ],
+   "status" : "OK"
+}
