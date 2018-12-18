@@ -15,6 +15,7 @@ class DistanceMatrix
         void printMatrix();
 
         void printVertices();
+        float tsp();
 
     private:
         vector<vector<DistanceMatrixCell> > matrix;

@@ -33,12 +33,13 @@ Curl::Curl( string sample )
     resultCode = 200;
 
     stringstream sstr;
-    ifstream sampleFile("../sampleResult");
+    ifstream sampleFile("../sampleResultNotFound");
 
     if (sampleFile)
     {
         sstr << sampleFile.rdbuf();
         resultString = sstr.str();
+        resultCode = 200;
     }
     
     sampleFile.close();
@@ -47,7 +48,8 @@ Curl::Curl( string sample )
 void Curl::curlRoute_Directions()
 {
 
-    string values = "Riverside,CA|Moreno+Valley,CA|Corona,CA|Fullerton,CA";
+    // string values = "Riverside,CA|Moreno+Valley,CA|Corona,CA|Fullerton,CA";
+    string values = "4055+E+CALLOWAY+CT|2739+E+LOOMIS+R|212+LAZY+RIDGE+AV|1467+SNYDER+S|20075+E+KETTLEMAN+LN|672+WHIPPORWILL+ST";
     string distMatrix = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=" + values + "&destinations=" + values + "&key=" + string(getenv("gMaps"));
     // cout << distMatrix << endl;
 

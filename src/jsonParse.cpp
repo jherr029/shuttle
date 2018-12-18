@@ -35,20 +35,38 @@ DistanceMatrix JsonParse::distanceMatrixParse()
     if ( status == "OK")
     {
         vector<string> tempOriginAddresses;
+        vector<string> tempDestinationAddresses;
         int tempSize = jsonDoc["origin_addresses"].Size();
 
+        string addr;
+
+        vector<int> validElements;
+
+        // This is only true when the addressed are symmetric
         for ( int i = 0; i < tempSize; i++ )
         {
-            tempOriginAddresses.push_back( jsonDoc["origin_addresses"][i].GetString() );
+            addr = jsonDoc["origin_addresses"][i].GetString();
+            if ( addr.size() != 0 )
+            {
+                // cout << addr << endl;
+                tempOriginAddresses.push_back( addr );
+                validElements.push_back(i);
+                // tempDestinationAddresses.push_back( addr );
+            }
         }
 
-        vector<string> tempDestinationAddresses;
         tempSize = jsonDoc["destination_addresses"].Size();
         // cout << tempSize << endl;
 
         for ( int i = 0; i < tempSize; i++ )
         {
-            tempDestinationAddresses.push_back( jsonDoc["destination_addresses"][i].GetString() );
+            addr = jsonDoc["destination_addresses"][i].GetString();
+
+            if ( addr.size() != 0 )
+            {
+                // cout << addr << endl;
+                tempDestinationAddresses.push_back( addr );
+            }
         }
 
 
@@ -57,25 +75,39 @@ DistanceMatrix JsonParse::distanceMatrixParse()
         int rowSize = rows.Size();
         // cout << rowSize << endl;
 
+        // cout << tempOriginAddresses.size() << " size of dest" << endl;
+
         DistanceMatrixCell cell;
-        for ( int i = 0; i < rowSize; i++ )
+        for ( int i = 0; i < validElements.size(); i++ )
         {
+            // cout << "i: " << i << endl;
             vector<DistanceMatrixCell> distanceCell;
-            Value & innerRow = rows[i]["elements"];
+            Value & innerRow = rows[validElements[i]]["elements"];
             int elementsSize = innerRow.Size();
+            // cout << "element size: " << elementsSize << endl;
 
             cell.setOrigin(tempOriginAddresses[i]);
+            int stepBack = 0;
+            
 
             for ( int j = 0; j < elementsSize; j++ )
             {
+                // cout << "j: " << j << endl;
                 if (innerRow[j]["status"] == "OK" )
                 {
                     int meters = innerRow[j]["distance"]["value"].GetInt();
+                    cout << meters << "---" << tempDestinationAddresses[j - stepBack] << endl;
                     cell.setMiles(meters);
-                    cell.setDestination(tempDestinationAddresses[j]);
+                    cell.setDestination(tempDestinationAddresses[j - stepBack]);
                     distanceCell.push_back(cell);
                 }
+                else
+                {
+                    // cout << "NOT_OKAY" << endl;
+                    stepBack++;
+                }
             }
+            cout << endl;
 
             matrix.buildMatrix(distanceCell);
         }
