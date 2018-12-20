@@ -10,18 +10,22 @@ class DistanceMatrixCell
     public:
         DistanceMatrixCell();
 
-        void setMiles( int );
+        void setMiles( float );
+        void setMinutes( float );
         void setOrigin( string );
         void setDestination( string );
         void printMiles();
+        void printMinutes();
         void printRoute();
 
-        float getmiles();
+        float getMiles();
+        float getMinutes();
         string getOrigin();
         string getDestination();
 
     private:
         float miles;
+        float minutes;
         string origin;
         string destination;
 

@@ -28,15 +28,15 @@ void JsonParse::prettyPrint()
 
 DistanceMatrix JsonParse::distanceMatrixParse()
 {
-    string status = jsonDoc["status"].GetString();
+    string status = jsonDoc["code"].GetString();
     // cout << status << endl;
 
     DistanceMatrix matrix;
-    if ( status == "OK")
+    if ( status == "Ok")
     {
         vector<string> tempOriginAddresses;
         vector<string> tempDestinationAddresses;
-        int tempSize = jsonDoc["origin_addresses"].Size();
+        int tempSize = jsonDoc["sources"].Size();
 
         string addr;
 
@@ -45,7 +45,7 @@ DistanceMatrix JsonParse::distanceMatrixParse()
         // This is only true when the addressed are symmetric
         for ( int i = 0; i < tempSize; i++ )
         {
-            addr = jsonDoc["origin_addresses"][i].GetString();
+            addr = jsonDoc["sources"][i]["name"].GetString();
             if ( addr.size() != 0 )
             {
                 // cout << addr << endl;
@@ -55,12 +55,12 @@ DistanceMatrix JsonParse::distanceMatrixParse()
             }
         }
 
-        tempSize = jsonDoc["destination_addresses"].Size();
+        tempSize = jsonDoc["sources"].Size();
         // cout << tempSize << endl;
 
         for ( int i = 0; i < tempSize; i++ )
         {
-            addr = jsonDoc["destination_addresses"][i].GetString();
+            addr = jsonDoc["sources"][i]["name"].GetString();
 
             if ( addr.size() != 0 )
             {
@@ -69,10 +69,10 @@ DistanceMatrix JsonParse::distanceMatrixParse()
             }
         }
 
-
         // vector<vector<DistanceMatrixCell> > matrix;
-        Value & rows = jsonDoc["rows"];
-        int rowSize = rows.Size();
+        Value & distanceRow = jsonDoc["distances"];
+        Value & durationRow = jsonDoc["durations"];
+        int rowSize = distanceRow.Size();
         // cout << rowSize << endl;
 
         // cout << tempOriginAddresses.size() << " size of dest" << endl;
@@ -82,32 +82,36 @@ DistanceMatrix JsonParse::distanceMatrixParse()
         {
             // cout << "i: " << i << endl;
             vector<DistanceMatrixCell> distanceCell;
-            Value & innerRow = rows[validElements[i]]["elements"];
-            int elementsSize = innerRow.Size();
+            // cout << "Distance: " << rows[0][1].GetFloat() << endl;
+            Value & innerDistanceRow = distanceRow[validElements[i]];
+            Value & innerDurationRow = durationRow[validElements[i]];
+            int elementsSize = innerDistanceRow.Size();
             // cout << "element size: " << elementsSize << endl;
 
             cell.setOrigin(tempOriginAddresses[i]);
             int stepBack = 0;
-            
 
             for ( int j = 0; j < elementsSize; j++ )
             {
                 // cout << "j: " << j << endl;
-                if (innerRow[j]["status"] == "OK" )
-                {
-                    int meters = innerRow[j]["distance"]["value"].GetInt();
-                    cout << meters << "---" << tempDestinationAddresses[j - stepBack] << endl;
-                    cell.setMiles(meters);
-                    cell.setDestination(tempDestinationAddresses[j - stepBack]);
-                    distanceCell.push_back(cell);
-                }
-                else
-                {
-                    // cout << "NOT_OKAY" << endl;
-                    stepBack++;
-                }
+                // if (innerRow[j]["status"] == "OK" )
+                // {
+                float meters = innerDistanceRow[j].GetFloat();
+                float seconds = innerDurationRow[j].GetFloat();
+                // cout << meters << "---" << tempDestinationAddresses[j - stepBack] << endl;
+                cell.setMiles(meters);
+                cell.setMinutes(seconds);
+                cell.setDestination(tempDestinationAddresses[j]);
+                distanceCell.push_back(cell);
+
+                // }
+                // else
+                // {
+                //     // cout << "NOT_OKAY" << endl;
+                //     stepBack++;
+                // }
             }
-            cout << endl;
+            // cout << endl;
 
             matrix.buildMatrix(distanceCell);
         }

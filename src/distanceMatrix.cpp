@@ -16,11 +16,42 @@ void DistanceMatrix::buildMatrix( vector<DistanceMatrixCell> row)
 
 void DistanceMatrix::printMatrix()
 {
+
+    cout << "Distance Matrix" << endl;
+
     for ( auto row : matrix )
     {
         for ( auto cell : row )
         {
            cell.printMiles();
+           cout << "\t"; 
+        }
+
+        cout << endl;
+    }
+
+    cout << endl;
+    cout << "Duration Matrix" << endl;
+
+    for ( auto row : matrix )
+    {
+        for ( auto cell : row )
+        {
+           cell.printMinutes();
+           cout << "\t"; 
+        }
+
+        cout << endl;
+    }
+
+    cout << endl;
+    cout << "Route" << endl;
+
+    for ( auto row : matrix )
+    {
+        for ( auto cell : row )
+        {
+           cell.printRoute();
            cout << "\t"; 
         }
 
@@ -38,11 +69,11 @@ void DistanceMatrix::printVertices()
 
         for ( auto x : y )
         {
-            if ( x.getmiles() == 0 )
+            if ( x.getMiles() == 0 )
                 continue;
 
             cout << "(" + vertexA + ", " + x.getDestination() << ") - " 
-                << x.getmiles() << endl;
+                << x.getMiles() << endl;
         }
 
         cout << endl;
@@ -78,12 +109,12 @@ float DistanceMatrix::tsp()
         vector<string> place;
         for ( int i = 0; i < vertex.size(); i++ )
         {
-            currentPathWeight += matrix[itr][vertex[i]].getmiles();
+            currentPathWeight += matrix[itr][vertex[i]].getMiles();
             itr = vertex[i];
             place.push_back(matrix[itr][vertex[i]].getOrigin());
         }
 
-        currentPathWeight += matrix[itr][0].getmiles();
+        currentPathWeight += matrix[itr][0].getMiles();
 
         minPath = min(minPath, currentPathWeight);
 
@@ -117,3 +148,5 @@ float DistanceMatrix::tsp()
 
     return minPath;
 }
+
+// http://127.0.0.1:5000/route/v1/driving/37.915744,-121.235618;37.922831,-121.242374?step=true
