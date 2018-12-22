@@ -16,8 +16,8 @@ class JsonParse
         void prettyPrint();
 
         void createDocument( string & );
-        DistanceMatrix distanceMatrixParse();
-    
+        DistanceMatrix distanceMatrixParse(vector<string>);
+        string coordsParse();
     private:
         Document jsonDoc;
 

@@ -26,7 +26,7 @@ void JsonParse::prettyPrint()
     cout << buffer.GetString() << endl << endl;
 }
 
-DistanceMatrix JsonParse::distanceMatrixParse()
+DistanceMatrix JsonParse::distanceMatrixParse(vector<string> addrVec)
 {
     string status = jsonDoc["code"].GetString();
     // cout << status << endl;
@@ -46,28 +46,35 @@ DistanceMatrix JsonParse::distanceMatrixParse()
         for ( int i = 0; i < tempSize; i++ )
         {
             addr = jsonDoc["sources"][i]["name"].GetString();
-            if ( addr.size() != 0 )
-            {
+            // if ( addr.size() != 0 )
+            // {
+            if ( addr.size() == 0 )
+                addr = "NO NAME";
                 // cout << addr << endl;
-                tempOriginAddresses.push_back( addr );
-                validElements.push_back(i);
+            tempOriginAddresses.push_back( addr );
+            validElements.push_back(i);
                 // tempDestinationAddresses.push_back( addr );
-            }
+            // }
         }
 
-        tempSize = jsonDoc["sources"].Size();
+        tempSize = jsonDoc["destinations"].Size();
         // cout << tempSize << endl;
 
         for ( int i = 0; i < tempSize; i++ )
         {
-            addr = jsonDoc["sources"][i]["name"].GetString();
+            addr = jsonDoc["destinations"][i]["name"].GetString();
 
-            if ( addr.size() != 0 )
-            {
-                // cout << addr << endl;
-                tempDestinationAddresses.push_back( addr );
-            }
+            // if ( addr.size() != 0 )
+            // {
+            if ( addr.size() == 0 )
+                addr = "NO NAME";
+
+            // cout << addr << endl;
+            tempDestinationAddresses.push_back( addr );
+            // }
         }
+
+        cout << tempDestinationAddresses.size() << endl;
 
         // vector<vector<DistanceMatrixCell> > matrix;
         Value & distanceRow = jsonDoc["distances"];
@@ -88,7 +95,7 @@ DistanceMatrix JsonParse::distanceMatrixParse()
             int elementsSize = innerDistanceRow.Size();
             // cout << "element size: " << elementsSize << endl;
 
-            cell.setOrigin(tempOriginAddresses[i]);
+            cell.setOrigin(addrVec[i]);
             int stepBack = 0;
 
             for ( int j = 0; j < elementsSize; j++ )
@@ -101,7 +108,7 @@ DistanceMatrix JsonParse::distanceMatrixParse()
                 // cout << meters << "---" << tempDestinationAddresses[j - stepBack] << endl;
                 cell.setMiles(meters);
                 cell.setMinutes(seconds);
-                cell.setDestination(tempDestinationAddresses[j]);
+                cell.setDestination(addrVec[j]);
                 distanceCell.push_back(cell);
 
                 // }
@@ -117,6 +124,7 @@ DistanceMatrix JsonParse::distanceMatrixParse()
         }
 
         cout << endl;
+        cout << "Done parsing" << endl;
         // matrix.printMatrix();
         // matrix.printVertices();
 
@@ -127,4 +135,20 @@ DistanceMatrix JsonParse::distanceMatrixParse()
 
 }
 
+string JsonParse::coordsParse()
+{
+    // prettyPrint();
+    if ( jsonDoc["status"] == "OK" )
+    {
+        // Value & coords = jsonDoc["results"][0]["formatted_address"];
+        Value & coords = jsonDoc["results"][0]["geometry"]["location"];
+        cout << "hi" << endl;
 
+        string lat = to_string(coords["lat"].GetDouble());
+        string lng = to_string(coords["lng"].GetDouble());
+
+        return lng + "," + lat;
+    }
+
+    return "invalid";
+}

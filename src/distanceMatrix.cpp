@@ -58,6 +58,7 @@ void DistanceMatrix::printMatrix()
         cout << endl;
     }
 
+    cout << endl;
 }
 
 void DistanceMatrix::printVertices()
@@ -98,11 +99,13 @@ float DistanceMatrix::tsp()
     int runs = 1;
 
     vector<vector<string> > pathHistory;
+    vector<float> timeHistory;
     vector<float> minPathVec;
 
 
     do {
         float currentPathWeight = 0;
+        float curTime = 0;
 
         int itr = 0;
 
@@ -110,17 +113,20 @@ float DistanceMatrix::tsp()
         for ( int i = 0; i < vertex.size(); i++ )
         {
             currentPathWeight += matrix[itr][vertex[i]].getMiles();
+            curTime += matrix[itr][vertex[i]].getMinutes();
             itr = vertex[i];
             place.push_back(matrix[itr][vertex[i]].getOrigin());
         }
 
         currentPathWeight += matrix[itr][0].getMiles();
+        curTime += matrix[itr][0].getMinutes();
 
         minPath = min(minPath, currentPathWeight);
 
         runs++;
         pathHistory.push_back(place);
         minPathVec.push_back(currentPathWeight);
+        timeHistory.push_back(curTime);
 
     } while (next_permutation(vertex.begin(), vertex.end()));
 
@@ -129,7 +135,7 @@ float DistanceMatrix::tsp()
     int correctPathIndex = 0;
     for (; correctPathIndex < minPathVec.size(); correctPathIndex++)
     {
-        cout << minPathVec[correctPathIndex] << endl;
+        // cout << minPathVec[correctPathIndex] << endl;
         if (minPath == minPathVec[correctPathIndex]) 
             break;
     }
@@ -146,7 +152,83 @@ float DistanceMatrix::tsp()
         cout << x << endl;
     }
 
+    cout << endl;
+    cout << "Minutes: " << timeHistory[correctPathIndex] << " Distance: "; 
+
     return minPath;
 }
 
 // http://127.0.0.1:5000/route/v1/driving/37.915744,-121.235618;37.922831,-121.242374?step=true
+float DistanceMatrix::tspDuration()
+{
+    vector<int> vertex;
+
+    // The limit part needs to changed later on when the program becomes complex
+    for ( int i = 1; i < matrix.size(); i++ )
+    {
+        vertex.push_back(i);
+    }
+
+
+    float minPath = FLT_MAX;
+    int runs = 1;
+
+    vector<vector<string> > pathHistory;
+    vector<float> minPathVec;
+    vector<float> distanceHistory;
+
+
+    do {
+        float currentPathWeight = 0;
+        float curDist = 0;
+
+        int itr = 0;
+
+        vector<string> place;
+        for ( int i = 0; i < vertex.size(); i++ )
+        {
+            currentPathWeight += matrix[itr][vertex[i]].getMinutes();
+            curDist += matrix[itr][vertex[i]].getMiles();
+            itr = vertex[i];
+            place.push_back(matrix[itr][vertex[i]].getOrigin());
+        }
+
+        currentPathWeight += matrix[itr][0].getMinutes();
+        curDist += matrix[itr][0].getMiles();
+
+        minPath = min(minPath, currentPathWeight);
+
+        runs++;
+        pathHistory.push_back(place);
+        minPathVec.push_back(currentPathWeight);
+        distanceHistory.push_back(curDist);
+
+    } while (next_permutation(vertex.begin(), vertex.end()));
+
+    // cout << runs << endl;
+    
+    int correctPathIndex = 0;
+    for (; correctPathIndex < minPathVec.size(); correctPathIndex++)
+    {
+        // cout << minPathVec[correctPathIndex] << endl;
+        if (minPath == minPathVec[correctPathIndex]) 
+            break;
+    }
+
+
+    vector<string> shortestPath = pathHistory[correctPathIndex];
+    pathHistory.clear();
+
+    shortestPath.insert(shortestPath.begin(), "Start: " + matrix[0][0].getOrigin());
+    shortestPath.push_back(matrix[0][0].getOrigin());
+
+    for ( auto x : shortestPath )
+    {
+        cout << x << endl;
+    }
+
+    cout << endl;
+    cout << "Distance: " << distanceHistory[correctPathIndex] << " Minutes: ";
+
+    return minPath;
+}

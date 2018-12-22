@@ -17,7 +17,8 @@ class Curl
         void curlRoute_Directions();
         void printResults();
 
-        DistanceMatrix startParse();
+        DistanceMatrix matrixParse(vector<string>);
+        string coordParse();
 
     private:
         string resultString;
