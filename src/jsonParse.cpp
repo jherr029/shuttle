@@ -8,7 +8,8 @@
 
 JsonParse::JsonParse()
 {
-    cout << "created JsonParse" << endl;
+    // cout << "created JsonParse" << endl;
+    ;
 }
 
 void JsonParse::createDocument( string & temp )
@@ -124,7 +125,7 @@ DistanceMatrix JsonParse::distanceMatrixParse(vector<string> addrVec)
         }
 
         cout << endl;
-        cout << "Done parsing" << endl;
+        // cout << "Done parsing" << endl;
         // matrix.printMatrix();
         // matrix.printVertices();
 
@@ -142,7 +143,7 @@ string JsonParse::coordsParse()
     {
         // Value & coords = jsonDoc["results"][0]["formatted_address"];
         Value & coords = jsonDoc["results"][0]["geometry"]["location"];
-        cout << "hi" << endl;
+        // cout << "hi" << endl;
 
         string lat = to_string(coords["lat"].GetDouble());
         string lng = to_string(coords["lng"].GetDouble());

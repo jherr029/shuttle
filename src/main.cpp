@@ -12,22 +12,24 @@ int main(int argc, char **argv)
 {
     // Curl sample;
     // cout << sample.coordParse() << endl;
-    if ( argc > 1 )
+    bool cont = true;
+    // if ( argc > 1 )
+    // {
+        // if ( strcmp(argv[1], "read") == 0 )
+    if ( cont == true )
     {
-        if ( strcmp(argv[1], "read") == 0 )
-        {
 
-            vector<string> addrVec = fileReadAddresses();
+        vector<string> addrVec = fileReadAddresses();
 
-            for ( auto & x : addrVec )
-            {
-                cout << x << endl;
-            }
+        // for ( auto & x : addrVec )
+        // {
+        //     cout << x << endl;
+        // }
 
-            getCoords(addrVec);
-            // Curl addrObjs(addrVec);
-        }
+        getCoords(addrVec);
+        // Curl addrObjs(addrVec);
     }
+    // }
 
     // Curl tempObj("hi");
     // Curl tempObj;
@@ -56,12 +58,16 @@ int main(int argc, char **argv)
     // cout << tempMatrix.tsp() << endl << endl;
     // cout << tempMatrix.tspDuration() << endl;
 
+    // ofstream tempFile("results.txt");
+    // tempFile << "pls" << endl;
+    // tempFile.close();
+
     return 0;
 }
 
 vector<string> fileReadAddresses()
 {
-    ifstream addrFile("../testFile.txt");
+    ifstream addrFile("testFile.txt");
 
     vector<string> addrVec;
 
@@ -84,6 +90,7 @@ void getCoords(vector<string> addrVec)
     vector<string> coordVec;
     for ( auto addr : addrVec )
     {
+        // cout << "curling addr" << endl;
         // cout << addr << endl;
         Curl addrObj(addr);
         coordVec.push_back(addrObj.coordParse());
@@ -99,5 +106,23 @@ void getCoords(vector<string> addrVec)
 
     // mtx.printMatrix();
     cout << mtx.tsp();
+    ofstream results("results.txt");
 
+    if (results)
+    {
+        vector<string> pathHistory = mtx.getPath();
+
+        results << pathHistory.size() << endl;
+
+        for ( auto address : pathHistory )
+        {
+            cout << address << endl;
+            results << address << "\n";
+        }
+
+        results << mtx.getDuration() << "\n";
+        results << mtx.getMiles() << "\n";
+
+        results.close();
+    }
 }

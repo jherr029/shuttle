@@ -18,8 +18,16 @@ class DistanceMatrix
         float tsp();
         float tspDuration();
 
+        vector<string> getPath();
+        float getMiles();
+        float getDuration();
+        
+
     private:
         vector<vector<DistanceMatrixCell> > matrix;
+        vector<string> path;
+        float miles;
+        float duration;
 
 };
 

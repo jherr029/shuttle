@@ -39,6 +39,7 @@ Curl::Curl()
 
 Curl::Curl( string addr )
 {
+    // cout << "hi" << endl;
     string distMatrix = "https://maps.googleapis.com/maps/api/geocode/json?address=" + addr + "&key=" + string(getenv("gMaps"));
     // cout << distMatrix << endl;
 
@@ -99,11 +100,11 @@ Curl::Curl( vector<string> & coords )
 
     coordString.pop_back();
 
-    cout << coordString << endl;
+    // cout << coordString << endl;
 
     string matrixUrl = "http://127.0.0.1:5000/table/v1/driving/";
     matrixUrl = matrixUrl + coordString + "?annotations=distance,duration";
-    cout << matrixUrl << endl;
+    // cout << matrixUrl << endl;
 
     // matrixUrl = "http://127.0.0.1:5000/route/v1/driving/-121.235580,37.915681;-121.240407,37.915063?steps=true";
 

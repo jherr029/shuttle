@@ -144,16 +144,19 @@ float DistanceMatrix::tsp()
     vector<string> shortestPath = pathHistory[correctPathIndex];
     pathHistory.clear();
 
-    shortestPath.insert(shortestPath.begin(), "Start: " + matrix[0][0].getOrigin());
+    shortestPath.insert(shortestPath.begin(), matrix[0][0].getOrigin());
     shortestPath.push_back(matrix[0][0].getOrigin());
 
     for ( auto x : shortestPath )
     {
-        cout << x << endl;
+        // cout << x << endl;
+        path.push_back(x);
     }
 
     cout << endl;
-    cout << "Minutes: " << timeHistory[correctPathIndex] << " Distance: "; 
+    // cout << "Minutes: " << timeHistory[correctPathIndex] << " Distance: "; 
+    duration = timeHistory[correctPathIndex];
+    miles = minPath;
 
     return minPath;
 }
@@ -219,16 +222,34 @@ float DistanceMatrix::tspDuration()
     vector<string> shortestPath = pathHistory[correctPathIndex];
     pathHistory.clear();
 
-    shortestPath.insert(shortestPath.begin(), "Start: " + matrix[0][0].getOrigin());
+    shortestPath.insert(shortestPath.begin(), matrix[0][0].getOrigin());
     shortestPath.push_back(matrix[0][0].getOrigin());
 
     for ( auto x : shortestPath )
     {
-        cout << x << endl;
+        // cout << x << endl;
+        path.push_back(x);
     }
 
     cout << endl;
-    cout << "Distance: " << distanceHistory[correctPathIndex] << " Minutes: ";
+    // cout << "Distance: " << distanceHistory[correctPathIndex] << " Minutes: ";
+    duration = minPath;
+    miles = distanceHistory[correctPathIndex];
 
     return minPath;
+}
+
+vector<string> DistanceMatrix::getPath()
+{
+    return path;
+}
+
+float DistanceMatrix::getMiles()
+{
+    return miles;
+}
+
+float DistanceMatrix::getDuration()
+{
+    return duration;
 }
