@@ -6,7 +6,7 @@
 
 DistanceMatrix::DistanceMatrix()
 {
-    cout << "DistanceMatrix" << endl;
+    // cout << "DistanceMatrix" << endl;
 }
 
 void DistanceMatrix::buildMatrix( vector<DistanceMatrixCell> row)
@@ -153,7 +153,7 @@ float DistanceMatrix::tsp()
         path.push_back(x);
     }
 
-    cout << endl;
+    // cout << endl;
     // cout << "Minutes: " << timeHistory[correctPathIndex] << " Distance: "; 
     duration = timeHistory[correctPathIndex];
     miles = minPath;
@@ -231,7 +231,7 @@ float DistanceMatrix::tspDuration()
         path.push_back(x);
     }
 
-    cout << endl;
+    // cout << endl;
     // cout << "Distance: " << distanceHistory[correctPathIndex] << " Minutes: ";
     duration = minPath;
     miles = distanceHistory[correctPathIndex];

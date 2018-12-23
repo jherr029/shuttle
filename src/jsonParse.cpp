@@ -47,37 +47,20 @@ DistanceMatrix JsonParse::distanceMatrixParse(vector<string> addrVec)
         for ( int i = 0; i < tempSize; i++ )
         {
             addr = jsonDoc["sources"][i]["name"].GetString();
-            // if ( addr.size() != 0 )
-            // {
             if ( addr.size() == 0 )
                 addr = "NO NAME";
-                // cout << addr << endl;
+
             tempOriginAddresses.push_back( addr );
             validElements.push_back(i);
-                // tempDestinationAddresses.push_back( addr );
-            // }
-        }
 
-        tempSize = jsonDoc["destinations"].Size();
-        // cout << tempSize << endl;
-
-        for ( int i = 0; i < tempSize; i++ )
-        {
             addr = jsonDoc["destinations"][i]["name"].GetString();
 
-            // if ( addr.size() != 0 )
-            // {
             if ( addr.size() == 0 )
                 addr = "NO NAME";
 
-            // cout << addr << endl;
             tempDestinationAddresses.push_back( addr );
-            // }
         }
 
-        cout << tempDestinationAddresses.size() << endl;
-
-        // vector<vector<DistanceMatrixCell> > matrix;
         Value & distanceRow = jsonDoc["distances"];
         Value & durationRow = jsonDoc["durations"];
         int rowSize = distanceRow.Size();
@@ -101,39 +84,24 @@ DistanceMatrix JsonParse::distanceMatrixParse(vector<string> addrVec)
 
             for ( int j = 0; j < elementsSize; j++ )
             {
-                // cout << "j: " << j << endl;
-                // if (innerRow[j]["status"] == "OK" )
-                // {
                 float meters = innerDistanceRow[j].GetFloat();
                 float seconds = innerDurationRow[j].GetFloat();
-                // cout << meters << "---" << tempDestinationAddresses[j - stepBack] << endl;
                 cell.setMiles(meters);
                 cell.setMinutes(seconds);
                 cell.setDestination(addrVec[j]);
                 distanceCell.push_back(cell);
 
-                // }
-                // else
-                // {
-                //     // cout << "NOT_OKAY" << endl;
-                //     stepBack++;
-                // }
+                // cout << meters << "---" << tempDestinationAddresses[j - stepBack] << endl;
             }
             // cout << endl;
 
             matrix.buildMatrix(distanceCell);
         }
 
-        cout << endl;
-        // cout << "Done parsing" << endl;
-        // matrix.printMatrix();
-        // matrix.printVertices();
-
-
+        // cout << endl;
     }
 
     return matrix;
-
 }
 
 string JsonParse::coordsParse()

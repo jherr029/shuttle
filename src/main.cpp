@@ -1,66 +1,45 @@
 #include <iostream>
 
 #include "../include/curl.h"
+#include "../include/cacheCoords.h"
 #include <fstream>
 #include <algorithm>
 
 // using namespace std;
 vector<string> fileReadAddresses();
-void getCoords(vector<string>);
+vector<string> getCoords(vector<string> &);
+void createMatrix(vector<string> &, vector<string> &);
+void writeResultsToFile(DistanceMatrix &);
 
 int main(int argc, char **argv)
 {
-    // Curl sample;
-    // cout << sample.coordParse() << endl;
-    bool cont = true;
-    // if ( argc > 1 )
-    // {
-        // if ( strcmp(argv[1], "read") == 0 )
-    if ( cont == true )
+    if ( argc > 1 )
     {
+        if ( strcmp(argv[1], "read") == 0 )
+        {
+            vector<string> addrVec = fileReadAddresses();
+            vector<string> coordVec = getCoords(addrVec);
+            createMatrix(addrVec, coordVec);
 
-        vector<string> addrVec = fileReadAddresses();
+            // Curl addrObjs(addrVec);
+        }
 
-        // for ( auto & x : addrVec )
-        // {
-        //     cout << x << endl;
-        // }
+        else if ( strcmp(argv[1], "debug") == 0 )
+        {
+            vector<string> addrVec;
+            addrVec.push_back("4114+Chadron+Ct,+Stockton,+Ca");
+            addrVec.push_back("2245+11th+st,+Stockton,+Ca");
+            addrVec.push_back("4600+E+fremont+st,+stockton,+ca");
+            
+            vector<string> coordVec;
+            coordVec.push_back("-121.235697,37.916046");
+            coordVec.push_back("-121.248969,37.932950");;
+            coordVec.push_back("-121.236624,37.969000");
 
-        getCoords(addrVec);
-        // Curl addrObjs(addrVec);
+            // getCoords(addrVec);
+            createMatrix(addrVec, coordVec);
+        }
     }
-    // }
-
-    // Curl tempObj("hi");
-    // Curl tempObj;
-
-    // vector<string> coordStrings;
-    // string strTemp;
-
-    // ifstream coordFile("../coords.txt");
-
-    // if (coordFile)
-    // {
-    //     while ( getline(coordFile, strTemp) )
-    //     {
-    //         coordStrings.push_back(strTemp);
-    //     }
-    // }
-
-    // Curl obj(coordStrings);
-    // // obj.printResults();
-    // DistanceMatrix tempMatrix = obj.startParse();
-    // // tempObj.curlRoute_Directions();
-    // // tempObj.printResults();
-    // // DistanceMatrix temp = tempObj.startParse();
-
-    // tempMatrix.printMatrix();
-    // cout << tempMatrix.tsp() << endl << endl;
-    // cout << tempMatrix.tspDuration() << endl;
-
-    // ofstream tempFile("results.txt");
-    // tempFile << "pls" << endl;
-    // tempFile.close();
 
     return 0;
 }
@@ -85,15 +64,34 @@ vector<string> fileReadAddresses()
     return addrVec;
 }
 
-void getCoords(vector<string> addrVec)
+vector<string> getCoords(vector<string> & addrVec)
 {
+    CacheCoords cache;
+
+    string coordinates;
+
     vector<string> coordVec;
+
     for ( auto addr : addrVec )
     {
         // cout << "curling addr" << endl;
         // cout << addr << endl;
-        Curl addrObj(addr);
-        coordVec.push_back(addrObj.coordParse());
+
+        if ( cache.checkKey(addr) )
+        {
+            coordinates = cache.getValue(addr);
+        }
+
+        else
+        {
+            Curl addrObj(addr);
+            coordinates = addrObj.coordParse();
+
+            cache.insertKeyAndValue(addr, coordinates);
+        }
+
+        coordVec.push_back(coordinates);
+
     }
 
     // for ( auto coord : coordVec )
@@ -101,11 +99,21 @@ void getCoords(vector<string> addrVec)
     //     cout << coord << endl;
     // }
 
+    return coordVec;
+}
+
+void createMatrix(vector<string> & addrVec, vector<string> & coordVec)
+{
     Curl pls(coordVec);
     DistanceMatrix mtx = pls.matrixParse(addrVec);
 
-    // mtx.printMatrix();
-    cout << mtx.tsp();
+    mtx.tsp();
+
+    writeResultsToFile(mtx);
+}
+
+void writeResultsToFile(DistanceMatrix & mtx)
+{
     ofstream results("results.txt");
 
     if (results)
@@ -114,15 +122,15 @@ void getCoords(vector<string> addrVec)
 
         results << pathHistory.size() << endl;
 
-        for ( auto address : pathHistory )
+        for ( auto & address : pathHistory )
         {
-            cout << address << endl;
+            // cout << address << endl;
             results << address << "\n";
         }
 
         results << mtx.getDuration() << "\n";
         results << mtx.getMiles() << "\n";
-
-        results.close();
     }
+
+    results.close();
 }
