@@ -44,6 +44,9 @@ void CacheCoords::stringKeyValueParser(string & str)
     }
 
     key = str.substr(0, delimiterPosition);
+
+    transform(key.begin(), key.end(), key.begin(), ::tolower);
+
     value = str.substr(delimiterPosition + 2);
 
     // cout << "key: " << key << " Value:" << value << endl;
@@ -53,6 +56,7 @@ void CacheCoords::stringKeyValueParser(string & str)
 
 bool CacheCoords::checkKey(string & key)
 {
+    transform(key.begin(), key.end(), key.begin(), ::tolower);
     if ( coordCacheMap.find(key) != coordCacheMap.end() )
         return true;
     
