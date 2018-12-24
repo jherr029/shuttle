@@ -10,6 +10,9 @@ vector<string> fileReadAddresses();
 vector<string> getCoords(vector<string> &);
 void createMatrix(vector<string> &, vector<string> &);
 void writeResultsToFile(DistanceMatrix &);
+void writeErrorToFile(int);
+
+int errorAtInput = 0;
 
 int main(int argc, char **argv)
 {
@@ -19,7 +22,14 @@ int main(int argc, char **argv)
         {
             vector<string> addrVec = fileReadAddresses();
             vector<string> coordVec = getCoords(addrVec);
-            createMatrix(addrVec, coordVec);
+            
+            if ( coordVec.size() != 0 )
+            {
+                createMatrix(addrVec, coordVec);
+            }
+
+            else
+                writeErrorToFile(errorAtInput);
 
             // Curl addrObjs(addrVec);
         }
@@ -56,6 +66,9 @@ vector<string> fileReadAddresses()
     {
         while  ( getline(addrFile, line) )
         {
+            if (line.size() == 0)
+                break;
+
             replace(line.begin(), line.end(), ' ', '+');
             addrVec.push_back(line);
         }
@@ -74,8 +87,8 @@ vector<string> getCoords(vector<string> & addrVec)
 
     for ( auto addr : addrVec )
     {
+        errorAtInput++;
         // cout << "curling addr" << endl;
-        // cout << addr << endl;
 
         if ( cache.checkKey(addr) )
         {
@@ -87,11 +100,22 @@ vector<string> getCoords(vector<string> & addrVec)
             Curl addrObj(addr);
             coordinates = addrObj.coordParse();
 
+            if (coordinates == "invalid")
+            {
+                break;
+            }
+
             cache.insertKeyAndValue(addr, coordinates);
         }
 
         coordVec.push_back(coordinates);
 
+    }
+
+
+    if (coordinates == "invalid")
+    {
+        coordVec.clear();
     }
 
     // for ( auto coord : coordVec )
@@ -133,4 +157,14 @@ void writeResultsToFile(DistanceMatrix & mtx)
     }
 
     results.close();
+}
+
+void writeErrorToFile(int errorAtInput)
+{
+    ofstream resultFile("results.txt");
+
+    resultFile << "error" << endl;
+    resultFile << errorAtInput << endl;
+
+    resultFile.close();
 }
