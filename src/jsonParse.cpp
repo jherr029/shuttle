@@ -14,6 +14,9 @@ JsonParse::JsonParse()
 
 void JsonParse::createDocument( string & temp )
 {
+    if ( temp == "NULL" )
+        temp = "{ \"status\": bad}";
+
     jsonDoc.Parse(temp.c_str());
 }
 
