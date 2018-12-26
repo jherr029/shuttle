@@ -19,6 +19,10 @@ add_subdirectory(${CMAKE_CURRENT_BINARY_DIR}/googletest-src
                  EXCLUDE_FROM_ALL)
 
 
-# include_directories(${PROJECT_SOURCE_DIR}/includes)
+# include_directories(${PROJECT_SOURCE_DIR}/include)
+add_library(CurlT ../src/curl.cpp ../include/curl.h)
+add_library(JsonT ../src/jsonParse.cpp ../include/jsonParse.h)
+add_library(DMCT ../src/distanceMatrixCell.cpp ../include/distanceMatrixCell.h)
+add_library(DMT ../src/distanceMatrix.cpp ../include/distanceMatrix.h)
 add_executable(tests main.cpp )
-target_link_libraries(tests gtest_main pthread curl)
+target_link_libraries(tests gtest_main pthread CurlT JsonT DMCT DMT curl)

@@ -1,11 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include <string>
-#include "../include/rapidjson/document.h"
-#include "../include/rapidjson/stringbuffer.h"
-#include "../include/rapidjson/prettywriter.h"
-#include <iomanip>
+#include "../include/curl.h"
 
 #include <gtest/gtest.h>
 
@@ -15,34 +11,23 @@ using namespace rapidjson;
 namespace {
 
 
-    TEST(JsonParse, doubleCorrectness)
+    TEST(Curl, address)
     {
-        ifstream jsonFile("../jsonFile");
-        stringstream sstr;
-        string resultString;
-        
-        if ( jsonFile.is_open() )
-        {
-            sstr << jsonFile.rdbuf();
-            resultString = sstr.str();
-        }
+        Curl address("1315+10th+St+B-27,+Sacramento,+CA");
 
-        else
-        {
-            cout << "can not open file " << endl;
-        }
+        ASSERT_EQ(200, address.getCode());
 
-        Document docObj;
-        docObj.Parse(resultString.c_str());
+    }
 
-        // cout << docObj["value"].GetFloat() << endl;
-        double parsedValue = docObj["value"].GetDouble();
+    TEST(Curl, coordinates)
+    {
+        vector<string> coordVec;
+        coordVec.push_back("-121.235697,37.916046");
+        coordVec.push_back("-121.248969,37.932950");;
+        coordVec.push_back("-121.236624,37.969000");
 
-        double temp  = 12.13456789;
-        cout << setprecision(10) << parsedValue << endl;
+        Curl coordinates(coordVec);
 
-        ASSERT_EQ(parsedValue, 12.13456789);
-
-
+        ASSERT_EQ(200, coordinates.getCode());
     }
 }
