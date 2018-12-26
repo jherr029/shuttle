@@ -13,9 +13,10 @@ namespace {
 
     TEST(Curl, address)
     {
-        Curl address("1315+10th+St+B-27,+Sacramento,+CA");
+        Curl address("4114+chadron+ct,+stockton,+ca");
 
         ASSERT_EQ(200, address.getCode());
+        ASSERT_NE(0, address.getResult().size());
 
     }
 

@@ -109,7 +109,6 @@ DistanceMatrix JsonParse::distanceMatrixParse(vector<string> addrVec)
 
 string JsonParse::coordsParse()
 {
-    // prettyPrint();
     if ( jsonDoc["status"] == "OK" )
     {
         // Value & coords = jsonDoc["results"][0]["formatted_address"];

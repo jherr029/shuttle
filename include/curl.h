@@ -21,6 +21,7 @@ class Curl
         string coordParse();
 
         int getCode();
+        string getResult();
 
     private:
         string resultString;

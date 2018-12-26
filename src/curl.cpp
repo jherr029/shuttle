@@ -39,9 +39,10 @@ Curl::Curl()
 
 Curl::Curl( string addr )
 {
-    // cout << "hi" << endl;
+    //cout << "address: " << addr << endl;
     string distMatrix = "https://maps.googleapis.com/maps/api/geocode/json?address=" + addr + "&key=" + string(getenv("gMaps"));
-    // cout << distMatrix << endl;
+    //string distMatrix = "jerrerah.com";
+    //cout << "!!" << distMatrix << endl;
 
     CURL * curl = curl_easy_init();
     CURLcode result; // to delete later
@@ -63,11 +64,12 @@ Curl::Curl( string addr )
     // curl_easy_setopt( curl, CURLOPT_XOAUTH2_BEARER, getenv("REDDIT_KEY") );
     curl_easy_setopt( curl, CURLOPT_WRITEFUNCTION, WriteCallback );
 
-    curl_easy_setopt( curl, CURLOPT_WRITEDATA, strTemp);
+    curl_easy_setopt( curl, CURLOPT_WRITEDATA, &strTemp);
 
     curl_easy_perform( curl );
     curl_easy_getinfo( curl, CURLINFO_RESPONSE_CODE, &httpCode);
-    curl_easy_cleanup( curl );
+
+    //curl_easy_cleanup( curl );
 
     resultCode = httpCode;
 
@@ -85,6 +87,8 @@ Curl::Curl( string addr )
         // cout << "error" << endl;
         // cout << "unsuccessful get from reddit" << endl;
     }
+
+    //cout << "gmaps: " << resultString << endl;
 
     curl_global_cleanup();
 }
@@ -104,7 +108,7 @@ Curl::Curl( vector<string> & coords )
 
     string matrixUrl = "http://127.0.0.1:5000/table/v1/driving/";
     matrixUrl = matrixUrl + coordString + "?annotations=distance,duration";
-    // cout << matrixUrl << endl;
+    //cout << matrixUrl << endl;
 
     // matrixUrl = "http://127.0.0.1:5000/route/v1/driving/-121.235580,37.915681;-121.240407,37.915063?steps=true";
 
@@ -129,7 +133,7 @@ Curl::Curl( vector<string> & coords )
     // curl_easy_setopt( curl, CURLOPT_XOAUTH2_BEARER, getenv("REDDIT_KEY") );
     curl_easy_setopt( curl, CURLOPT_WRITEFUNCTION, WriteCallback );
 
-    curl_easy_setopt( curl, CURLOPT_WRITEDATA, strTemp);
+    curl_easy_setopt( curl, CURLOPT_WRITEDATA, &strTemp);
 
     curl_easy_perform( curl );
     curl_easy_getinfo( curl, CURLINFO_RESPONSE_CODE, &httpCode);
@@ -151,6 +155,8 @@ Curl::Curl( vector<string> & coords )
         // cout << "error" << endl;
         // cout << "unsuccessful get from reddit" << endl;
     }
+
+    //cout << "osrm: " << resultString << endl;
 
     curl_global_cleanup();
 }
@@ -182,4 +188,9 @@ void Curl::printResults()
 int Curl::getCode()
 {
     return resultCode;
+}
+
+string Curl::getResult()
+{
+    return resultString;
 }
