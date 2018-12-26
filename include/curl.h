@@ -20,6 +20,8 @@ class Curl
         DistanceMatrix matrixParse(vector<string>);
         string coordParse();
 
+        int getCode();
+
     private:
         string resultString;
         int resultCode;

@@ -178,3 +178,8 @@ void Curl::printResults()
     cout << resultCode << endl;
     cout << resultString << endl;
 }
+
+int Curl::getCode()
+{
+    return resultCode;
+}
